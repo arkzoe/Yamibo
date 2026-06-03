@@ -13,23 +13,31 @@ class AppBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      selectedFontSize: 0,
+      unselectedFontSize: 0,
       currentIndex: currentIndex,
       onTap: onTap,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.bookmark_border),
           activeIcon: Icon(Icons.bookmark),
-          label: '收藏',
+          label: '',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.forum_outlined),
           activeIcon: Icon(Icons.forum),
-          label: '论坛',
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.message_outlined),
+          activeIcon: Icon(Icons.message),
+          label: '',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline),
           activeIcon: Icon(Icons.person),
-          label: '我的',
+          label: '',
         ),
       ],
     );
