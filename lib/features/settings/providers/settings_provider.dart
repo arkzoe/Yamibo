@@ -25,18 +25,13 @@ class ReaderConfigState {
   }
 }
 
-class SettingsNotifier extends Notifier<ReaderConfigState> {
+class SettingsNotifier extends AsyncNotifier<ReaderConfigState> {
   @override
-  ReaderConfigState build() {
-    _init();
-    return const ReaderConfigState();
-  }
-
-  Future<void> _init() async {
+  Future<ReaderConfigState> build() async {
     final fontSize = await SettingsStorage.getFontSize();
     final lineHeight = await SettingsStorage.getLineHeight();
     final loadImages = await SettingsStorage.getLoadImages();
-    state = ReaderConfigState(
+    return ReaderConfigState(
       fontSize: fontSize,
       lineHeight: lineHeight,
       loadImages: loadImages,
@@ -44,21 +39,24 @@ class SettingsNotifier extends Notifier<ReaderConfigState> {
   }
 
   Future<void> setFontSize(double size) async {
-    state = state.copyWith(fontSize: size);
+    final current = state.asData?.value ?? const ReaderConfigState();
+    state = AsyncValue.data(current.copyWith(fontSize: size));
     await SettingsStorage.setFontSize(size);
   }
 
   Future<void> setLineHeight(double height) async {
-    state = state.copyWith(lineHeight: height);
+    final current = state.asData?.value ?? const ReaderConfigState();
+    state = AsyncValue.data(current.copyWith(lineHeight: height));
     await SettingsStorage.setLineHeight(height);
   }
 
   Future<void> setLoadImages(bool value) async {
-    state = state.copyWith(loadImages: value);
+    final current = state.asData?.value ?? const ReaderConfigState();
+    state = AsyncValue.data(current.copyWith(loadImages: value));
     await SettingsStorage.setLoadImages(value);
   }
 }
 
-final settingsProvider = NotifierProvider<SettingsNotifier, ReaderConfigState>(
+final settingsProvider = AsyncNotifierProvider<SettingsNotifier, ReaderConfigState>(
   SettingsNotifier.new,
 );

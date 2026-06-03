@@ -7,8 +7,9 @@ class HistoryPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final entries = ref.watch(historyProvider);
+    final entriesAsync = ref.watch(historyProvider);
     final notifier = ref.read(historyProvider.notifier);
+    final entries = entriesAsync.asData?.value ?? [];
 
     return Scaffold(
       appBar: AppBar(

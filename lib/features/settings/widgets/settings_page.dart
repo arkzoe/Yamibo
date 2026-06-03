@@ -9,9 +9,11 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final readerConfig = ref.watch(settingsProvider);
-    final themeMode = ref.watch(themeModeProvider);
+    final readerConfigAsync = ref.watch(settingsProvider);
+    final themeModeAsync = ref.watch(themeModeProvider);
     final themeNotifier = ref.read(themeModeProvider.notifier);
+    final readerConfig = readerConfigAsync.asData?.value ?? const ReaderConfigState();
+    final themeMode = themeModeAsync.asData?.value ?? AppThemeMode.light;
 
     return Scaffold(
       appBar: AppBar(title: const Text('设置')),

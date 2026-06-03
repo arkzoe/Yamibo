@@ -7,6 +7,7 @@ import 'shared/theme/app_theme.dart';
 import 'shared/widgets/bottom_nav_bar.dart';
 import 'features/bbs/widgets/bbs_page.dart';
 import 'features/mine/widgets/mine_page.dart';
+import 'features/message/message_page.dart';
 import 'features/favorite/widgets/favorite_page.dart';
 import 'features/reader/widgets/reader_web_page.dart';
 import 'features/manga/widgets/manga_web_page.dart';
@@ -14,19 +15,15 @@ import 'features/history/widgets/history_page.dart';
 import 'features/settings/widgets/settings_page.dart';
 
 Page<T> _slideTransition<T>(Widget child) => CustomTransitionPage<T>(
-      child: child,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.fastOutSlowIn;
-        final tween = Tween(begin: begin, end: end)
-            .chain(CurveTween(curve: curve));
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
-    );
+  child: child,
+  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    const begin = Offset(1.0, 0.0);
+    const end = Offset.zero;
+    const curve = Curves.fastOutSlowIn;
+    final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+    return SlideTransition(position: animation.drive(tween), child: child);
+  },
+);
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -49,6 +46,15 @@ final routerProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,
               child: const BBSPage(),
+              transitionsBuilder: (_, animation, _, child) =>
+                  FadeTransition(opacity: animation, child: child),
+            ),
+          ),
+          GoRoute(
+            path: '/message',
+            pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: const MessagePage(),
               transitionsBuilder: (_, animation, _, child) =>
                   FadeTransition(opacity: animation, child: child),
             ),
@@ -80,13 +86,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/history',
-        pageBuilder: (context, state) =>
-            _slideTransition(const HistoryPage()),
+        pageBuilder: (context, state) => _slideTransition(const HistoryPage()),
       ),
       GoRoute(
         path: '/settings',
-        pageBuilder: (context, state) =>
-            _slideTransition(const SettingsPage()),
+        pageBuilder: (context, state) => _slideTransition(const SettingsPage()),
       ),
     ],
   );
@@ -114,8 +118,10 @@ class _AppShellWrapperState extends ConsumerState<_AppShellWrapper> {
   void _updateIndex(String location) {
     if (location.startsWith('/bbs')) {
       _currentIndex = 1;
-    } else if (location.startsWith('/mine')) {
+    } else if (location.startsWith('/message')) {
       _currentIndex = 2;
+    } else if (location.startsWith('/mine')) {
+      _currentIndex = 3;
     } else {
       _currentIndex = 0;
     }
@@ -130,6 +136,8 @@ class _AppShellWrapperState extends ConsumerState<_AppShellWrapper> {
       case 1:
         context.go('/bbs');
       case 2:
+        context.go('/message');
+      case 3:
         context.go('/mine');
     }
   }
@@ -151,11 +159,12 @@ class YamiboApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
+    final themeModeAsync = ref.watch(themeModeProvider);
     final router = ref.watch(routerProvider);
+    final themeMode = themeModeAsync.asData?.value ?? AppThemeMode.light;
 
     return MaterialApp.router(
-      title: '300文学',
+      title: '300百合会',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.getTheme(themeMode),
       routerConfig: router,

@@ -12,6 +12,11 @@ class CookieManager {
     return _cached;
   }
 
+  static void saveSync(String cookie) {
+    _cached = cookie;
+    SharedPreferences.getInstance().then((prefs) => prefs.setString(_key, cookie));
+  }
+
   static Future<void> save(String cookie) async {
     _cached = cookie;
     final prefs = await SharedPreferences.getInstance();
@@ -39,7 +44,7 @@ class CookieInjectInterceptor extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     final setCookie = response.headers.value('set-cookie');
     if (setCookie != null && setCookie.isNotEmpty) {
-      CookieManager.save(setCookie);
+      CookieManager.saveSync(setCookie);
     }
     handler.next(response);
   }

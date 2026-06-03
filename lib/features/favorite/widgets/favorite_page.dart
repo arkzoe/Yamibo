@@ -7,17 +7,14 @@ class FavoritePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(favoriteProvider);
+    final stateAsync = ref.watch(favoriteProvider);
     final notifier = ref.read(favoriteProvider.notifier);
 
-    if (state.isLoading) {
-      return const Scaffold(
+    return stateAsync.when(
+      loading: () => const Scaffold(
         body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    if (state.isError) {
-      return Scaffold(
+      ),
+      error: (err, _) => Scaffold(
         appBar: AppBar(title: const Text('收藏')),
         body: Center(
           child: Column(
@@ -25,21 +22,19 @@ class FavoritePage extends ConsumerWidget {
             children: [
               const Icon(Icons.error_outline, size: 64),
               const SizedBox(height: 16),
-              Text(state.errorMessage ?? '加载失败'),
+              Text(err.toString()),
               const SizedBox(height: 16),
               FilledButton(
-                onPressed: () {},
+                onPressed: () => notifier.retry(),
                 child: const Text('重试'),
               ),
             ],
           ),
         ),
-      );
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(state.isSelectionMode ? '选择收藏' : '收藏'),
+      ),
+      data: (state) => Scaffold(
+        appBar: AppBar(
+          title: Text(state.isSelectionMode ? '选择收藏' : '收藏'),
         actions: [
           if (state.isSelectionMode) ...[
             TextButton(
@@ -82,6 +77,7 @@ class FavoritePage extends ConsumerWidget {
                 );
               },
             ),
+      ),
     );
   }
 }

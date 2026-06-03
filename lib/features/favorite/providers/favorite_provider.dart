@@ -34,19 +34,14 @@ class FavoriteState {
   }
 }
 
-class FavoriteNotifier extends Notifier<FavoriteState> {
+class FavoriteNotifier extends AsyncNotifier<FavoriteState> {
   @override
-  FavoriteState build() {
-    _load();
-    return const FavoriteState();
-  }
-
-  Future<void> _load() async {
+  Future<FavoriteState> build() async {
     try {
       final items = await FavoriteStorage.load();
-      state = state.copyWith(items: items, isLoading: false);
+      return FavoriteState(items: items, isLoading: false);
     } catch (e) {
-      state = state.copyWith(
+      return FavoriteState(
         isLoading: false,
         isError: true,
         errorMessage: e.toString(),
@@ -55,48 +50,67 @@ class FavoriteNotifier extends Notifier<FavoriteState> {
   }
 
   void toggleSelection(String id) {
-    state = state.copyWith(
-      items: state.items.map((item) {
+    final s = state.asData?.value ?? const FavoriteState();
+    state = AsyncValue.data(s.copyWith(
+      items: s.items.map((item) {
         if (item.id == id) {
           return item.copyWith(isSelected: !item.isSelected);
         }
         return item;
       }).toList(),
-    );
+    ));
   }
 
   void toggleSelectionMode() {
-    if (state.isSelectionMode) {
-      state = state.copyWith(
+    final s = state.asData?.value ?? const FavoriteState();
+    if (s.isSelectionMode) {
+      state = AsyncValue.data(s.copyWith(
         isSelectionMode: false,
-        items: state.items.map((e) => e.copyWith(isSelected: false)).toList(),
-      );
+        items: s.items.map((e) => e.copyWith(isSelected: false)).toList(),
+      ));
     } else {
-      state = state.copyWith(isSelectionMode: true);
+      state = AsyncValue.data(s.copyWith(isSelectionMode: true));
     }
   }
 
   void selectAll() {
-    state = state.copyWith(
-      items: state.items.map((e) => e.copyWith(isSelected: true)).toList(),
-    );
+    final s = state.asData?.value ?? const FavoriteState();
+    state = AsyncValue.data(s.copyWith(
+      items: s.items.map((e) => e.copyWith(isSelected: true)).toList(),
+    ));
   }
 
   Future<void> deleteSelected() async {
-    final remaining = state.items.where((e) => !e.isSelected).toList();
-    state = state.copyWith(items: remaining, isSelectionMode: false);
+    final s = state.asData?.value ?? const FavoriteState();
+    final remaining = s.items.where((e) => !e.isSelected).toList();
+    state = AsyncValue.data(FavoriteState(
+      items: remaining,
+      isLoading: false,
+      isSelectionMode: false,
+    ));
     await FavoriteStorage.save(remaining);
   }
 
   void reorder(int oldIndex, int newIndex) {
-    final items = [...state.items];
+    final s = state.asData?.value ?? const FavoriteState();
+    final items = [...s.items];
     final item = items.removeAt(oldIndex);
     items.insert(newIndex, item);
-    state = state.copyWith(items: items);
+    state = AsyncValue.data(s.copyWith(items: items));
     FavoriteStorage.save(items);
+  }
+
+  Future<void> retry() async {
+    state = const AsyncValue.loading();
+    try {
+      final items = await FavoriteStorage.load();
+      state = AsyncValue.data(FavoriteState(items: items, isLoading: false));
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
   }
 }
 
-final favoriteProvider = NotifierProvider<FavoriteNotifier, FavoriteState>(
+final favoriteProvider = AsyncNotifierProvider<FavoriteNotifier, FavoriteState>(
   FavoriteNotifier.new,
 );

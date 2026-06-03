@@ -2,24 +2,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/storage/settings_storage.dart';
 import '../theme/app_theme.dart';
 
-final themeModeProvider = NotifierProvider<ThemeModeNotifier, AppThemeMode>(
+final themeModeProvider = AsyncNotifierProvider<ThemeModeNotifier, AppThemeMode>(
   ThemeModeNotifier.new,
 );
 
-class ThemeModeNotifier extends Notifier<AppThemeMode> {
+class ThemeModeNotifier extends AsyncNotifier<AppThemeMode> {
   @override
-  AppThemeMode build() {
-    _init();
-    return AppThemeMode.light;
-  }
-
-  Future<void> _init() async {
+  Future<AppThemeMode> build() async {
     final mode = await SettingsStorage.getThemeMode();
-    state = AppTheme.fromInt(mode);
+    return AppTheme.fromInt(mode);
   }
 
   Future<void> setTheme(AppThemeMode mode) async {
-    state = mode;
+    state = AsyncValue.data(mode);
     await SettingsStorage.setThemeMode(mode.index);
   }
 }

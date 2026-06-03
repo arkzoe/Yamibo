@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../core/network/dio_client.dart';
 
 class UpdateInfo {
   final String tagName;
@@ -29,8 +30,8 @@ class UpdateApi {
       headers['Authorization'] = 'Bearer $token';
     }
 
-    final dio = Dio(BaseOptions(headers: headers));
-    final resp = await dio.get(_apiUrl);
+    final dio = DioClient.dio;
+    final resp = await dio.get(_apiUrl, options: Options(headers: headers));
     final data = resp.data as Map<String, dynamic>;
 
     final assets = data['assets'] as List;

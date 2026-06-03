@@ -2,28 +2,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/models/history_entry.dart';
 import '../../../core/storage/history_storage.dart';
 
-class HistoryNotifier extends Notifier<List<HistoryEntry>> {
+class HistoryNotifier extends AsyncNotifier<List<HistoryEntry>> {
   @override
-  List<HistoryEntry> build() {
-    _load();
-    return [];
-  }
-
-  Future<void> _load() async {
-    state = await HistoryStorage.load();
+  Future<List<HistoryEntry>> build() async {
+    return HistoryStorage.load();
   }
 
   Future<void> deleteEntry(String id) async {
-    state = state.where((e) => e.id != id).toList();
-    await HistoryStorage.save(state);
+    final current = state.asData?.value ?? [];
+    final updated = current.where((e) => e.id != id).toList();
+    state = AsyncValue.data(updated);
+    await HistoryStorage.save(updated);
   }
 
   Future<void> clearAll() async {
-    state = [];
-    await HistoryStorage.save(state);
+    state = const AsyncValue.data([]);
+    await HistoryStorage.save([]);
   }
 }
 
-final historyProvider = NotifierProvider<HistoryNotifier, List<HistoryEntry>>(
+final historyProvider = AsyncNotifierProvider<HistoryNotifier, List<HistoryEntry>>(
   HistoryNotifier.new,
 );
