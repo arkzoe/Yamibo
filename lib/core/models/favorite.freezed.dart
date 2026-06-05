@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FavoriteItem {
 
- String get id; String get title; String get url; String get author; String get lastReply; int get sortOrder; bool get isSelected;
+ String get id; String get title; String get url; String get author; String get authorId; String get lastReply; int get sortOrder; bool get isSelected; int get type;
 /// Create a copy of FavoriteItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $FavoriteItemCopyWith<FavoriteItem> get copyWith => _$FavoriteItemCopyWithImpl<F
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.url, url) || other.url == url)&&(identical(other.author, author) || other.author == author)&&(identical(other.lastReply, lastReply) || other.lastReply == lastReply)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.isSelected, isSelected) || other.isSelected == isSelected));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FavoriteItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.url, url) || other.url == url)&&(identical(other.author, author) || other.author == author)&&(identical(other.authorId, authorId) || other.authorId == authorId)&&(identical(other.lastReply, lastReply) || other.lastReply == lastReply)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.isSelected, isSelected) || other.isSelected == isSelected)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,url,author,lastReply,sortOrder,isSelected);
+int get hashCode => Object.hash(runtimeType,id,title,url,author,authorId,lastReply,sortOrder,isSelected,type);
 
 @override
 String toString() {
-  return 'FavoriteItem(id: $id, title: $title, url: $url, author: $author, lastReply: $lastReply, sortOrder: $sortOrder, isSelected: $isSelected)';
+  return 'FavoriteItem(id: $id, title: $title, url: $url, author: $author, authorId: $authorId, lastReply: $lastReply, sortOrder: $sortOrder, isSelected: $isSelected, type: $type)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $FavoriteItemCopyWith<$Res>  {
   factory $FavoriteItemCopyWith(FavoriteItem value, $Res Function(FavoriteItem) _then) = _$FavoriteItemCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String url, String author, String lastReply, int sortOrder, bool isSelected
+ String id, String title, String url, String author, String authorId, String lastReply, int sortOrder, bool isSelected, int type
 });
 
 
@@ -65,16 +65,18 @@ class _$FavoriteItemCopyWithImpl<$Res>
 
 /// Create a copy of FavoriteItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? url = null,Object? author = null,Object? lastReply = null,Object? sortOrder = null,Object? isSelected = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? url = null,Object? author = null,Object? authorId = null,Object? lastReply = null,Object? sortOrder = null,Object? isSelected = null,Object? type = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
+as String,authorId: null == authorId ? _self.authorId : authorId // ignore: cast_nullable_to_non_nullable
 as String,lastReply: null == lastReply ? _self.lastReply : lastReply // ignore: cast_nullable_to_non_nullable
 as String,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as int,isSelected: null == isSelected ? _self.isSelected : isSelected // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -156,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String url,  String author,  String lastReply,  int sortOrder,  bool isSelected)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String url,  String author,  String authorId,  String lastReply,  int sortOrder,  bool isSelected,  int type)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FavoriteItem() when $default != null:
-return $default(_that.id,_that.title,_that.url,_that.author,_that.lastReply,_that.sortOrder,_that.isSelected);case _:
+return $default(_that.id,_that.title,_that.url,_that.author,_that.authorId,_that.lastReply,_that.sortOrder,_that.isSelected,_that.type);case _:
   return orElse();
 
 }
@@ -177,10 +179,10 @@ return $default(_that.id,_that.title,_that.url,_that.author,_that.lastReply,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String url,  String author,  String lastReply,  int sortOrder,  bool isSelected)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String url,  String author,  String authorId,  String lastReply,  int sortOrder,  bool isSelected,  int type)  $default,) {final _that = this;
 switch (_that) {
 case _FavoriteItem():
-return $default(_that.id,_that.title,_that.url,_that.author,_that.lastReply,_that.sortOrder,_that.isSelected);}
+return $default(_that.id,_that.title,_that.url,_that.author,_that.authorId,_that.lastReply,_that.sortOrder,_that.isSelected,_that.type);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -194,10 +196,10 @@ return $default(_that.id,_that.title,_that.url,_that.author,_that.lastReply,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String url,  String author,  String lastReply,  int sortOrder,  bool isSelected)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String url,  String author,  String authorId,  String lastReply,  int sortOrder,  bool isSelected,  int type)?  $default,) {final _that = this;
 switch (_that) {
 case _FavoriteItem() when $default != null:
-return $default(_that.id,_that.title,_that.url,_that.author,_that.lastReply,_that.sortOrder,_that.isSelected);case _:
+return $default(_that.id,_that.title,_that.url,_that.author,_that.authorId,_that.lastReply,_that.sortOrder,_that.isSelected,_that.type);case _:
   return null;
 
 }
@@ -209,16 +211,18 @@ return $default(_that.id,_that.title,_that.url,_that.author,_that.lastReply,_tha
 @JsonSerializable()
 
 class _FavoriteItem implements FavoriteItem {
-  const _FavoriteItem({required this.id, required this.title, required this.url, this.author = '', this.lastReply = '', this.sortOrder = 0, this.isSelected = false});
+  const _FavoriteItem({required this.id, required this.title, required this.url, this.author = '', this.authorId = '', this.lastReply = '', this.sortOrder = 0, this.isSelected = false, this.type = 0});
   factory _FavoriteItem.fromJson(Map<String, dynamic> json) => _$FavoriteItemFromJson(json);
 
 @override final  String id;
 @override final  String title;
 @override final  String url;
 @override@JsonKey() final  String author;
+@override@JsonKey() final  String authorId;
 @override@JsonKey() final  String lastReply;
 @override@JsonKey() final  int sortOrder;
 @override@JsonKey() final  bool isSelected;
+@override@JsonKey() final  int type;
 
 /// Create a copy of FavoriteItem
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +237,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FavoriteItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.url, url) || other.url == url)&&(identical(other.author, author) || other.author == author)&&(identical(other.lastReply, lastReply) || other.lastReply == lastReply)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.isSelected, isSelected) || other.isSelected == isSelected));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FavoriteItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.url, url) || other.url == url)&&(identical(other.author, author) || other.author == author)&&(identical(other.authorId, authorId) || other.authorId == authorId)&&(identical(other.lastReply, lastReply) || other.lastReply == lastReply)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder)&&(identical(other.isSelected, isSelected) || other.isSelected == isSelected)&&(identical(other.type, type) || other.type == type));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,url,author,lastReply,sortOrder,isSelected);
+int get hashCode => Object.hash(runtimeType,id,title,url,author,authorId,lastReply,sortOrder,isSelected,type);
 
 @override
 String toString() {
-  return 'FavoriteItem(id: $id, title: $title, url: $url, author: $author, lastReply: $lastReply, sortOrder: $sortOrder, isSelected: $isSelected)';
+  return 'FavoriteItem(id: $id, title: $title, url: $url, author: $author, authorId: $authorId, lastReply: $lastReply, sortOrder: $sortOrder, isSelected: $isSelected, type: $type)';
 }
 
 
@@ -253,7 +257,7 @@ abstract mixin class _$FavoriteItemCopyWith<$Res> implements $FavoriteItemCopyWi
   factory _$FavoriteItemCopyWith(_FavoriteItem value, $Res Function(_FavoriteItem) _then) = __$FavoriteItemCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String url, String author, String lastReply, int sortOrder, bool isSelected
+ String id, String title, String url, String author, String authorId, String lastReply, int sortOrder, bool isSelected, int type
 });
 
 
@@ -270,16 +274,18 @@ class __$FavoriteItemCopyWithImpl<$Res>
 
 /// Create a copy of FavoriteItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? url = null,Object? author = null,Object? lastReply = null,Object? sortOrder = null,Object? isSelected = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? url = null,Object? author = null,Object? authorId = null,Object? lastReply = null,Object? sortOrder = null,Object? isSelected = null,Object? type = null,}) {
   return _then(_FavoriteItem(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
 as String,author: null == author ? _self.author : author // ignore: cast_nullable_to_non_nullable
+as String,authorId: null == authorId ? _self.authorId : authorId // ignore: cast_nullable_to_non_nullable
 as String,lastReply: null == lastReply ? _self.lastReply : lastReply // ignore: cast_nullable_to_non_nullable
 as String,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as int,isSelected: null == isSelected ? _self.isSelected : isSelected // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

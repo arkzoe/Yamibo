@@ -10,12 +10,16 @@ _Content _$ContentFromJson(Map<String, dynamic> json) => _Content(
   type: $enumDecode(_$ContentTypeEnumMap, json['type']),
   data: json['data'] as String,
   isChapterTitle: json['isChapterTitle'] as bool? ?? false,
+  postIndex: (json['postIndex'] as num?)?.toInt() ?? 0,
+  authorId: json['authorId'] as String? ?? '',
 );
 
 Map<String, dynamic> _$ContentToJson(_Content instance) => <String, dynamic>{
   'type': _$ContentTypeEnumMap[instance.type]!,
   'data': instance.data,
   'isChapterTitle': instance.isChapterTitle,
+  'postIndex': instance.postIndex,
+  'authorId': instance.authorId,
 };
 
 const _$ContentTypeEnumMap = {

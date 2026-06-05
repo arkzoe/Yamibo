@@ -11,6 +11,8 @@ sealed class Content with _$Content {
     required ContentType type,
     required String data,
     @Default(false) bool isChapterTitle,
+    @Default(0) int postIndex,
+    @Default('') String authorId,
   }) = _Content;
 
   factory Content.fromJson(Map<String, dynamic> json) =>

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Content {
 
- ContentType get type; String get data; bool get isChapterTitle;
+ ContentType get type; String get data; bool get isChapterTitle; int get postIndex; String get authorId;
 /// Create a copy of Content
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ContentCopyWith<Content> get copyWith => _$ContentCopyWithImpl<Content>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Content&&(identical(other.type, type) || other.type == type)&&(identical(other.data, data) || other.data == data)&&(identical(other.isChapterTitle, isChapterTitle) || other.isChapterTitle == isChapterTitle));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Content&&(identical(other.type, type) || other.type == type)&&(identical(other.data, data) || other.data == data)&&(identical(other.isChapterTitle, isChapterTitle) || other.isChapterTitle == isChapterTitle)&&(identical(other.postIndex, postIndex) || other.postIndex == postIndex)&&(identical(other.authorId, authorId) || other.authorId == authorId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,type,data,isChapterTitle);
+int get hashCode => Object.hash(runtimeType,type,data,isChapterTitle,postIndex,authorId);
 
 @override
 String toString() {
-  return 'Content(type: $type, data: $data, isChapterTitle: $isChapterTitle)';
+  return 'Content(type: $type, data: $data, isChapterTitle: $isChapterTitle, postIndex: $postIndex, authorId: $authorId)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ContentCopyWith<$Res>  {
   factory $ContentCopyWith(Content value, $Res Function(Content) _then) = _$ContentCopyWithImpl;
 @useResult
 $Res call({
- ContentType type, String data, bool isChapterTitle
+ ContentType type, String data, bool isChapterTitle, int postIndex, String authorId
 });
 
 
@@ -65,12 +65,14 @@ class _$ContentCopyWithImpl<$Res>
 
 /// Create a copy of Content
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? data = null,Object? isChapterTitle = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? data = null,Object? isChapterTitle = null,Object? postIndex = null,Object? authorId = null,}) {
   return _then(_self.copyWith(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as ContentType,data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as String,isChapterTitle: null == isChapterTitle ? _self.isChapterTitle : isChapterTitle // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,postIndex: null == postIndex ? _self.postIndex : postIndex // ignore: cast_nullable_to_non_nullable
+as int,authorId: null == authorId ? _self.authorId : authorId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ContentType type,  String data,  bool isChapterTitle)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ContentType type,  String data,  bool isChapterTitle,  int postIndex,  String authorId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Content() when $default != null:
-return $default(_that.type,_that.data,_that.isChapterTitle);case _:
+return $default(_that.type,_that.data,_that.isChapterTitle,_that.postIndex,_that.authorId);case _:
   return orElse();
 
 }
@@ -173,10 +175,10 @@ return $default(_that.type,_that.data,_that.isChapterTitle);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ContentType type,  String data,  bool isChapterTitle)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ContentType type,  String data,  bool isChapterTitle,  int postIndex,  String authorId)  $default,) {final _that = this;
 switch (_that) {
 case _Content():
-return $default(_that.type,_that.data,_that.isChapterTitle);}
+return $default(_that.type,_that.data,_that.isChapterTitle,_that.postIndex,_that.authorId);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -190,10 +192,10 @@ return $default(_that.type,_that.data,_that.isChapterTitle);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ContentType type,  String data,  bool isChapterTitle)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ContentType type,  String data,  bool isChapterTitle,  int postIndex,  String authorId)?  $default,) {final _that = this;
 switch (_that) {
 case _Content() when $default != null:
-return $default(_that.type,_that.data,_that.isChapterTitle);case _:
+return $default(_that.type,_that.data,_that.isChapterTitle,_that.postIndex,_that.authorId);case _:
   return null;
 
 }
@@ -205,12 +207,14 @@ return $default(_that.type,_that.data,_that.isChapterTitle);case _:
 @JsonSerializable()
 
 class _Content implements Content {
-  const _Content({required this.type, required this.data, this.isChapterTitle = false});
+  const _Content({required this.type, required this.data, this.isChapterTitle = false, this.postIndex = 0, this.authorId = ''});
   factory _Content.fromJson(Map<String, dynamic> json) => _$ContentFromJson(json);
 
 @override final  ContentType type;
 @override final  String data;
 @override@JsonKey() final  bool isChapterTitle;
+@override@JsonKey() final  int postIndex;
+@override@JsonKey() final  String authorId;
 
 /// Create a copy of Content
 /// with the given fields replaced by the non-null parameter values.
@@ -225,16 +229,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Content&&(identical(other.type, type) || other.type == type)&&(identical(other.data, data) || other.data == data)&&(identical(other.isChapterTitle, isChapterTitle) || other.isChapterTitle == isChapterTitle));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Content&&(identical(other.type, type) || other.type == type)&&(identical(other.data, data) || other.data == data)&&(identical(other.isChapterTitle, isChapterTitle) || other.isChapterTitle == isChapterTitle)&&(identical(other.postIndex, postIndex) || other.postIndex == postIndex)&&(identical(other.authorId, authorId) || other.authorId == authorId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,type,data,isChapterTitle);
+int get hashCode => Object.hash(runtimeType,type,data,isChapterTitle,postIndex,authorId);
 
 @override
 String toString() {
-  return 'Content(type: $type, data: $data, isChapterTitle: $isChapterTitle)';
+  return 'Content(type: $type, data: $data, isChapterTitle: $isChapterTitle, postIndex: $postIndex, authorId: $authorId)';
 }
 
 
@@ -245,7 +249,7 @@ abstract mixin class _$ContentCopyWith<$Res> implements $ContentCopyWith<$Res> {
   factory _$ContentCopyWith(_Content value, $Res Function(_Content) _then) = __$ContentCopyWithImpl;
 @override @useResult
 $Res call({
- ContentType type, String data, bool isChapterTitle
+ ContentType type, String data, bool isChapterTitle, int postIndex, String authorId
 });
 
 
@@ -262,12 +266,14 @@ class __$ContentCopyWithImpl<$Res>
 
 /// Create a copy of Content
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? type = null,Object? data = null,Object? isChapterTitle = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? type = null,Object? data = null,Object? isChapterTitle = null,Object? postIndex = null,Object? authorId = null,}) {
   return _then(_Content(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as ContentType,data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as String,isChapterTitle: null == isChapterTitle ? _self.isChapterTitle : isChapterTitle // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,postIndex: null == postIndex ? _self.postIndex : postIndex // ignore: cast_nullable_to_non_nullable
+as int,authorId: null == authorId ? _self.authorId : authorId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
