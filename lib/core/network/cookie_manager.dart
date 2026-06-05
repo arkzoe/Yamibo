@@ -42,9 +42,9 @@ class CookieInjectInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    final setCookie = response.headers.value('set-cookie');
-    if (setCookie != null && setCookie.isNotEmpty) {
-      CookieManager.saveSync(setCookie);
+    final setCookies = response.headers['set-cookie'];
+    if (setCookies != null && setCookies.isNotEmpty) {
+      CookieManager.saveSync(setCookies.last);
     }
     handler.next(response);
   }
