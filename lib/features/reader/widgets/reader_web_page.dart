@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../shared/widgets/web_page.dart';
+import 'package:go_router/go_router.dart';
+import '../../probe/content_prober.dart';
+import 'reader_page.dart';
 
 class ReaderWebPage extends StatelessWidget {
   final String url;
@@ -8,6 +10,15 @@ class ReaderWebPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WebPage(url: url, title: '阅读');
+    final tid = ContentProber.extractTid(url);
+    if (tid != null) {
+      return ReaderPage(tid: tid);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.pop();
+    });
+    return const Scaffold(
+      body: Center(child: Text('无效的链接')),
+    );
   }
 }

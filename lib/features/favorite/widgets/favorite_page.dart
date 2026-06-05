@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/favorite_provider.dart';
+import '../../probe/content_prober.dart';
 
 class FavoritePage extends ConsumerWidget {
   const FavoritePage({super.key});
@@ -72,6 +74,8 @@ class FavoritePage extends ConsumerWidget {
                   onTap: () {
                     if (state.isSelectionMode) {
                       notifier.toggleSelection(item.id);
+                    } else {
+                      _navigateToItem(context, item);
                     }
                   },
                 );
@@ -79,6 +83,23 @@ class FavoritePage extends ConsumerWidget {
             ),
       ),
     );
+  }
+}
+
+void _navigateToItem(BuildContext context, dynamic item) {
+  final tid = ContentProber.extractTid(item.url) ?? '';
+  switch (item.type) {
+    case 0:
+      context.go('/probe', extra: {
+        'url': item.url,
+        'favoriteId': item.id,
+      });
+    case 1:
+      context.go('/reader/$tid?authorId=${item.authorId}&title=${Uri.encodeComponent(item.title ?? '')}');
+    case 2:
+      context.go('/manga', extra: {'url': item.url});
+    default:
+      context.go('/other', extra: {'url': item.url});
   }
 }
 
@@ -106,7 +127,7 @@ class _FavoriteItemTile extends StatelessWidget {
       title: Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: item.author.isNotEmpty ? Text(item.author) : null,
       trailing: isSelectionMode ? null : const Icon(Icons.drag_handle),
-      onTap: isSelectionMode ? onTap : null,
+      onTap: onTap,
     );
   }
 }
