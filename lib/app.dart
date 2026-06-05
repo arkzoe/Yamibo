@@ -9,24 +9,30 @@ import 'features/bbs/widgets/bbs_page.dart';
 import 'features/mine/widgets/mine_page.dart';
 import 'features/message/message_page.dart';
 import 'features/favorite/widgets/favorite_page.dart';
-import 'features/reader/widgets/reader_web_page.dart';
+import 'features/reader/widgets/reader_page.dart';
 import 'features/manga/widgets/manga_web_page.dart';
 import 'features/history/widgets/history_page.dart';
 import 'features/settings/widgets/settings_page.dart';
+import 'features/probe/probing_page.dart';
+import 'features/bbs/widgets/other_web_page.dart';
+
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 Page<T> _slideTransition<T>(Widget child) => CustomTransitionPage<T>(
-  child: child,
-  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-    const begin = Offset(1.0, 0.0);
-    const end = Offset.zero;
-    const curve = Curves.fastOutSlowIn;
-    final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-    return SlideTransition(position: animation.drive(tween), child: child);
-  },
-);
+      child: child,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.fastOutSlowIn;
+        final tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(position: animation.drive(tween), child: child);
+      },
+    );
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/favorite',
     routes: [
       ShellRoute(
@@ -71,11 +77,55 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
       GoRoute(
-        path: '/reader',
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/reader/:tid',
+        pageBuilder: (context, state) {
+          final tid = state.pathParameters['tid'] ?? '';
+          final authorId = state.uri.queryParameters['authorId'];
+          final title = state.uri.queryParameters['title'];
+          return _slideTransition(ReaderPage(
+            tid: tid,
+            authorId: authorId,
+            title: title,
+          ));
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/manga',
         pageBuilder: (context, state) {
           final url = state.uri.queryParameters['url'] ?? '';
-          return _slideTransition(ReaderWebPage(url: url));
+          return _slideTransition(MangaWebPage(url: url));
         },
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/probe',
+        pageBuilder: (context, state) {
+          final url = state.uri.queryParameters['url'] ?? '';
+          final favoriteId = state.uri.queryParameters['favoriteId'];
+          return _slideTransition(ProbingPage(url: url, favoriteId: favoriteId));
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/other',
+        pageBuilder: (context, state) {
+          final url = state.uri.queryParameters['url'] ?? '';
+          return _slideTransition(OtherWebPage(url: url));
+        },
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/history',
+        pageBuilder: (context, state) =>
+            _slideTransition(const HistoryPage()),
+      ),
+      GoRoute(
+        parentNavigatorKey: _rootNavigatorKey,
+        path: '/settings',
+        pageBuilder: (context, state) =>
+            _slideTransition(const SettingsPage()),
       ),
       GoRoute(
         path: '/manga',
@@ -85,12 +135,32 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: '/probe',
+        pageBuilder: (context, state) {
+          final url = state.uri.queryParameters['url'] ?? '';
+          final favoriteId = state.uri.queryParameters['favoriteId'];
+          return _slideTransition(ProbingPage(
+            url: url,
+            favoriteId: favoriteId,
+          ));
+        },
+      ),
+      GoRoute(
+        path: '/other',
+        pageBuilder: (context, state) {
+          final url = state.uri.queryParameters['url'] ?? '';
+          return _slideTransition(OtherWebPage(url: url));
+        },
+      ),
+      GoRoute(
         path: '/history',
-        pageBuilder: (context, state) => _slideTransition(const HistoryPage()),
+        pageBuilder: (context, state) =>
+            _slideTransition(const HistoryPage()),
       ),
       GoRoute(
         path: '/settings',
-        pageBuilder: (context, state) => _slideTransition(const SettingsPage()),
+        pageBuilder: (context, state) =>
+            _slideTransition(const SettingsPage()),
       ),
     ],
   );
